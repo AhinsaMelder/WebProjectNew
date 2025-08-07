@@ -4,6 +4,8 @@ import axios from "axios";
 import mediaUpload from "../utils/mediaUpload";
 
 export default function AddCar() {
+
+  const [carID, setCarID] = useState('');
   const [brand, setBrand] = useState('');
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');

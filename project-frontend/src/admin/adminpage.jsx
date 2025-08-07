@@ -1,9 +1,25 @@
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import ManageCars from "./manageCars";
+import Welcome from "./welcome";
+import UserManagment from "./userManagment";
+
 
 export default function AdminPage() {
+
     const location = useLocation();
 
+    const navigate = useNavigate();
+
     const navigationItems = [
+         {
+            path: "/adminpage/welcome",
+            label: "Welcome",
+            icon: (
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+            )
+        },
         {
             path: "/adminpage/cars",
             label: "Fleet Management",
@@ -72,6 +88,7 @@ export default function AdminPage() {
     ];
 
     const isActive = (path) => location.pathname === path;
+
 
     function handleLogout() {
         localStorage.removeItem('token');
@@ -188,64 +205,10 @@ export default function AdminPage() {
                 {/* Content Area */}
                 <div className="flex-1 overflow-auto p-8 bg-slate-50">
                     <Routes path="/*">
-                        <Route path="/cars" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <div className="flex items-center space-x-3 mb-6">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h1 className="text-3xl font-bold text-slate-800">Fleet Management</h1>
-                                        <p className="text-slate-600">Manage vehicles, availability, and maintenance</p>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-blue-600 mb-1">125</div>
-                                        <p className="text-blue-700 text-sm">Total Vehicles</p>
-                                    </div>
-                                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-green-600 mb-1">98</div>
-                                        <p className="text-green-700 text-sm">Available</p>
-                                    </div>
-                                    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-yellow-600 mb-1">27</div>
-                                        <p className="text-yellow-700 text-sm">On Rent</p>
-                                    </div>
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/users" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <div className="flex items-center space-x-3 mb-6">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h1 className="text-3xl font-bold text-slate-800">User Management</h1>
-                                        <p className="text-slate-600">Manage customers, leasers, and user accounts</p>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-blue-600 mb-1">2,847</div>
-                                        <p className="text-blue-700 text-sm">Total Users</p>
-                                    </div>
-                                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-green-600 mb-1">2,654</div>
-                                        <p className="text-green-700 text-sm">Customers</p>
-                                    </div>
-                                    <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-purple-600 mb-1">193</div>
-                                        <p className="text-purple-700 text-sm">Leasers</p>
-                                    </div>
-                                </div>
-                            </div>
-                        } />
+                        <Route path="/" element={<Welcome/>} />
+                        <Route path="/welcome" element={<Welcome/>} />
+                        <Route path="/cars" element={<ManageCars />} />
+                        <Route path="/users" element=  {<UserManagment/>} />
                         <Route path="/orders" element={
                             <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
                                 <div className="flex items-center space-x-3 mb-6">

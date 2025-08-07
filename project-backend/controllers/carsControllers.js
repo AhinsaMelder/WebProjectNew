@@ -1,4 +1,5 @@
 import Car from "../models/cars.js"
+import { isAdmin } from "./userControllers.js";
 
 export async function savecar(req, res) {
 
@@ -68,5 +69,159 @@ export async function getCars(req, res) {
             message: "Error getting cars",
             error: error.message,
         });
+    }
+}
+
+export async function getCarByEmail(req,res){
+
+    const email = req.params.email;
+
+    try{
+
+        const cars = await Car.find({email:email});
+
+        res.json(cars);
+
+    }catch(error){
+        res.json({
+            message:"Error getting cars",
+            error:error.message,
+        })
+    }
+}
+
+export async function updateCar(req,res){
+
+    try{
+
+        await Car.updateOne({carId:req.params.carId},req.body);
+
+        res.json({
+            message:"Car updated successfully",
+        })
+
+    }catch(error){
+        res.json({
+            message:"Error updating car",
+            error:error.message,
+        })
+    }
+
+}
+
+export async function deletecar(req,res){
+
+    try{
+
+        await Car.deleteOne({carId:req.params.carId});
+
+        res.json({
+            message:"Car deleted successfully",
+        })
+
+    }catch(error){
+        res.json({
+            message:"Error deleting car",
+            error:error.message,
+        })
+    }
+}
+
+export async function getCarById(req,res){
+
+    try{
+
+        const carId = req.params.carId;
+        const car = await Car.findOne({carId:carId});
+
+        res.json(car);
+
+    }catch(error){
+        res.json({
+            message:"Error getting car",
+            error:error.message,
+        })
+    }
+}
+
+export async function getPendingCars(req,res){
+
+    try{
+
+        const cars = await Car.find({status : "Pending"});
+
+        res.json(cars);
+
+    }catch(error){
+        res.json({
+            message:"Error getting cars",
+            error:error.message,
+        })
+    }
+}
+
+export async function getAprovedCars(req,res){
+
+    try{
+
+        const cars = await Car.find({status : "approved"});
+
+        res.json(cars);
+
+    }catch(error){
+        res.json({
+            message:"Error getting cars",
+            error:error.message,
+        })
+    }
+}
+
+export async function approvedCar(req,res){
+
+    if(!isAdmin(req)){
+        res.json({
+            message:"You are not authorized to perform this action"
+        })
+        return
+    }
+
+    try {
+
+        await Car.updateOne({carId:req.params.carId},{status:"approved"});
+
+        res.json({
+            message:"Car approved successfully",
+        })
+
+    } catch (error) {
+        res.json({
+            message:"Error approving car",
+            error:error.message,
+        })
+    }
+}
+
+export async function RejectCar(req,res){
+
+    if(!isAdmin(req)){
+        res.json({
+            message:"You are not authorized to perform this action"
+        })
+        return
+    }
+
+    try {
+
+        await Car.updateOne({carId:req.params.carId},{status:"Rejected"});
+
+        res.json({
+            message:"Car Rejected successfully",
+        })
+
+    } catch (error) {
+        res.json({
+            message:"Error approving car",
+            error:error.message,
+        })
     }
 }

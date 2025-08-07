@@ -58,7 +58,8 @@ export function login(req, res) {
                     message:"Login successful",
                     token:token,
                     role:user.role,
-                    firstName:user.firstName
+                    email:user.email,
+                    firstName:user.firstName  
                 })
                 }else{
                     res.json({
@@ -69,3 +70,30 @@ export function login(req, res) {
             }
         })
 } 
+
+
+export function isAdmin(req){
+
+  if(req.user == null){
+    return false;
+  }
+  if(req.user.role == "admin"){
+    return true;
+  }
+  return false;
+}
+
+export async function getAllusers(req,res){
+
+    try{
+
+        const users = await User.find({role: {$in :["customer", "seller"]}});
+        res.json(users); 
+
+    }catch(error){
+        res.json({
+            message:"Error getting users",
+            error:error.message,
+        })
+    }
+}

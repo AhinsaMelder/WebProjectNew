@@ -10,7 +10,7 @@ export default function DealsPage(){
     
     useEffect (()=>{
         if(loading == true){
-            axios.get(import.meta.env.VITE_BACKEND_URL + '/api/cars/getCars')
+            axios.get(import.meta.env.VITE_BACKEND_URL + '/api/cars/getapprovedcars')
             .then((response)=>{
                 setCars(response.data);
                 setLoading(false);

@@ -1,6 +1,9 @@
 import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import AddCar from "./addCar";
 import Profile from "./profile";
+import LeaserCar from "./leaserCar";
+import EditCars from "./editCar";
+
 
 export default function LeaserPage() {
     const location = useLocation();
@@ -159,12 +162,7 @@ export default function LeaserPage() {
                 {/* Content Area */}
                 <div className="flex-1 overflow-auto p-8 bg-slate-50">
                     <Routes path="/*">
-                        <Route path="/cars" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <h1 className="text-3xl font-bold text-slate-800">Your Fleet</h1>
-                                <p className="text-slate-600 mt-2">Manage your premium vehicle collection</p>
-                            </div>
-                        } />
+                        <Route path="/cars" element={<LeaserCar/> } />
                         <Route path="/add-cars" element={<AddCar/>} />
                         <Route path="/orders" element={
                             <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
@@ -173,6 +171,7 @@ export default function LeaserPage() {
                             </div>
                         } />
                         <Route path="/profile" element={<Profile/>} />
+                         <Route path="/edit-cars" element={<EditCars/>} />
                     </Routes>
                 </div>
             </div>

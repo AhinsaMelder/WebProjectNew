@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ProductCard({ car }) {
   return (
-    <div className="group max-w-sm bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border border-slate-100 overflow-hidden">
+    <Link to={`/overview/${car.carId}`} className="group max-w-sm bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border border-slate-100 overflow-hidden">
       {/* Image Section */}
       <div className="relative w-full h-48 overflow-hidden">
         <img
@@ -121,6 +122,6 @@ export default function ProductCard({ car }) {
 
       {/* Bottom Border Accent */}
       <div className="h-1 bg-gradient-to-r from-blue-600 to-cyan-500"></div>
-    </div>
+    </Link>
   );
 }

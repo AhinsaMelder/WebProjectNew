@@ -60,6 +60,7 @@ export default function Login() {
       toast.success("Login successful");
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username",response.data.firstName);
+      localStorage.setItem("userEmail",response.data.email);
       console.log(response.data.firstName);
 
       if (response.data.role === "admin") {
