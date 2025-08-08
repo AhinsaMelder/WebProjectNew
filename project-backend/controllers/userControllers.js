@@ -97,3 +97,21 @@ export async function getAllusers(req,res){
         })
     }
 }
+
+export async function viewdetails(req,res){
+
+    const email = req.params.email;
+
+    try{
+
+        const user = await User.findOne({email:email});
+        res.json(user); 
+
+    }catch(error){
+        res.json({
+            message:"Error getting user",
+            error:error.message,
+        })
+    }
+
+}

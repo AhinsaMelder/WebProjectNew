@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Welcome() {
   const firstName = localStorage.getItem("username");
     return (
@@ -33,7 +35,7 @@ export default function Welcome() {
             {/* Quick Actions Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* Browse Cars */}
-                <div className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border border-slate-100">
+                <Link to="/deals" className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border border-slate-100 cursor-pointer">
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300">
                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
@@ -41,7 +43,7 @@ export default function Welcome() {
                     </div>
                     <h3 className="text-lg font-bold text-slate-800 mb-2">Browse Cars</h3>
                     <p className="text-slate-600 text-sm">Explore our premium vehicle collection</p>
-                </div>
+                </Link>
 
                 {/* My Bookings */}
                 <div className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 border border-slate-100">

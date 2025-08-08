@@ -3,6 +3,7 @@ import AddCar from "./addCar";
 import Profile from "./profile";
 import LeaserCar from "./leaserCar";
 import EditCars from "./editCar";
+import LeaserWelcome from "./welcome";
 
 
 export default function LeaserPage() {
@@ -10,6 +11,15 @@ export default function LeaserPage() {
     const naviagte = useNavigate();
     
     const navigationItems = [
+         {
+            path: "/leaserpage/welcome",
+            label: "Welcome",
+            icon: (
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+            )
+        },
         {
             path: "/leaserpage/cars",
             label: "Cars",
@@ -162,6 +172,8 @@ export default function LeaserPage() {
                 {/* Content Area */}
                 <div className="flex-1 overflow-auto p-8 bg-slate-50">
                     <Routes path="/*">
+                        <Route path="/" element={<LeaserWelcome/>} />
+                        <Route path="/welcome" element={<LeaserWelcome/>} />
                         <Route path="/cars" element={<LeaserCar/> } />
                         <Route path="/add-cars" element={<AddCar/>} />
                         <Route path="/orders" element={

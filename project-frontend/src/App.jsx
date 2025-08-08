@@ -13,6 +13,7 @@ import LeaserPage from "./leaser/leaser";
 import CustomerPage from "./customer/customerpage";
 import DealsPage from "./pages/Deals";
 import CarOverview from "./pages/carOverview";
+import Checkout from "./pages/checkout";
 
 // import other pages when ready...
 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/leaserpage/*" element={<LeaserPage/>} />
         <Route path="/CustomerPage/*" element={<CustomerPage/>} />
         <Route path="/overview/:carId" element={<CarOverview/>} />
+       <Route path="/checkout" element={<Checkout/>} />
         {/* Add other routes here */}
       </Routes>
     </Router>
