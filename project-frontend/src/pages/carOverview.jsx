@@ -69,7 +69,8 @@ export default function CarOverview() {
               startDate: startDate,
               endDate: endDate,
               rentalDays: rentalDays,
-              totalPrice: totalPrice    
+              totalPrice: totalPrice ,   
+              caremail :car.email
           }
 
         localStorage.setItem('cart', JSON.stringify(cart));

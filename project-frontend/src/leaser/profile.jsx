@@ -1,4 +1,74 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
 export default function Profile() {
+
+    const [email, setEmail] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
+
+    async function viewDeatails(){
+
+        const Email = localStorage.getItem('userEmail');
+        try{
+
+            const res = await axios.get(import.meta.env.VITE_BACKEND_URL + '/api/user/userdeatils/'+Email);
+            console.log(res.data);
+            setEmail(res.data.email || '');
+            setFirstName(res.data.firstName || '');
+            setLastName(res.data.lastName || '');
+
+        }catch(error){
+            console.log(error);
+        }
+
+    }
+
+    async function updateProfile(){
+         
+        const useremail = localStorage.getItem("userEmail");
+
+        try{
+
+            const updateData = {
+                email:email.trim(),
+                firstName:firstName.trim(), 
+                lastName:lastName.trim(),   
+            };
+
+            if(password.trim()){
+                updateData.password = password;
+            }
+
+            await axios.put(import.meta.env.VITE_BACKEND_URL + '/api/user/updateprofile/'+useremail, updateData);
+
+            toast.success('Profile updated successfully!');
+            navigate('/leaserpage');
+
+        }catch(error){
+            console.log(error);
+            if(error.response && error.response.data && error.response.data.message){
+                toast.error(error.response.data.message);   
+
+
+            }
+        }
+
+    }
+    
+
+    useEffect(()=>{
+        viewDeatails();
+    },[])
+
+
+
+
     return (
         <div className="max-w-4xl mx-auto">
             {/* Header Section */}
@@ -29,12 +99,28 @@ export default function Profile() {
                     </h2>
 
                     <form className="space-y-6">
-                        {/* First Name */}
+                       
+                        {/* Email Address */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-slate-700">Email Address *</label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                value={email}
+                                disabled
+                                placeholder="Enter your email address"
+                                required 
+                                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            />
+                        </div>
+
                         <div className="space-y-2">
                             <label className="block text-sm font-medium text-slate-700">First Name *</label>
                             <input 
                                 type="text" 
                                 name="firstName" 
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
                                 placeholder="Enter your first name"
                                 required 
                                 className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -47,19 +133,9 @@ export default function Profile() {
                             <input 
                                 type="text" 
                                 name="lastName" 
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
                                 placeholder="Enter your last name"
-                                required 
-                                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                            />
-                        </div>
-
-                        {/* Email Address */}
-                        <div className="space-y-2">
-                            <label className="block text-sm font-medium text-slate-700">Email Address *</label>
-                            <input 
-                                type="email" 
-                                name="email" 
-                                placeholder="Enter your email address"
                                 required 
                                 className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                             />
@@ -71,6 +147,7 @@ export default function Profile() {
                             <input 
                                 type="password" 
                                 name="password" 
+                                onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Enter your password"
                                 required 
                                 className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
@@ -85,7 +162,7 @@ export default function Profile() {
                             >
                                 Cancel
                             </button>
-                            <button 
+                            <button onClick={updateProfile}
                                 type="submit" 
                                 className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                             >
@@ -102,4 +179,4 @@ export default function Profile() {
             </div>
         </div>
     );
-}
+    }

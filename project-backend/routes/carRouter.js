@@ -1,10 +1,11 @@
 import express from 'express';
-import { approvedCar, deletecar, getAprovedCars, getCarByEmail, getCarById, getCars, getPendingCars, RejectCar, savecar, updateCar } from '../controllers/carsControllers.js';
+import { approvedCar, deletecar, getAprovedCars, getCarByEmail, getCarById, getCars, getCarsAdmin, getPendingCars, RejectCar, savecar, updateCar } from '../controllers/carsControllers.js';
 
 const carRouter=express.Router();
 
 carRouter.post("/savecar",savecar)
 carRouter.get("/getcars",getCars)
+carRouter.get("/admincar",getCarsAdmin)
 carRouter.get("/getpendingcars",getPendingCars);
 carRouter.get("/getapprovedcars",getAprovedCars);
 carRouter.get("/getcarsemail/:email",getCarByEmail);

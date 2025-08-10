@@ -1,7 +1,10 @@
 import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import ManageCars from "./manageCars";
 import Welcome from "./welcome";
 import UserManagment from "./userManagment";
+import AdminOrder from "./adminOrder";
+import ManageCars from "./rentalcars";
+import ViewCars from "./viewCars";
+
 
 
 export default function AdminPage() {
@@ -22,7 +25,7 @@ export default function AdminPage() {
         },
         {
             path: "/adminpage/cars",
-            label: "Fleet Management",
+            label: " Vehicle Approvals",  
             icon: (
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
@@ -39,6 +42,16 @@ export default function AdminPage() {
             )
         },
         {
+          path: "/adminpage/viewrentalcars",
+          label: "Fleet Managements",
+          icon: (
+               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M16.5 3a2.5 2.5 0 100 5 2.48 2.48 0 001.5-.5l1.79 1.79c.2.2.2.51 0 .71l-1.29 1.29a.5.5 0 01-.71 0L16 10.21V11h-1.5l-.44 1.32a4.5 4.5 0 00-8.12 0L5.5 11H4v-1.5h1.5l.44-1.32a4.5 4.5 0 018.12 0L14.5 9H16V7.79l-1.21-1.21A2.48 2.48 0 0016.5 7a2.5 2.5 0 000-5zM6.5 15a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm7 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+              </svg>
+            )
+        },
+
+        {
             path: "/adminpage/orders",
             label: "Order Management",
             icon: (
@@ -47,34 +60,7 @@ export default function AdminPage() {
                 </svg>
             )
         },
-        {
-            path: "/adminpage/reviews",
-            label: "Reviews & Ratings",
-            icon: (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-            )
-        },
-        {
-            path: "/adminpage/analytics",
-            label: "Analytics",
-            icon: (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                </svg>
-            )
-        },
-        {
-            path: "/adminpage/settings",
-            label: "System Settings",
-            icon: (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-            )
-        },
+        
         {
             path: "/adminpage/logout",
             label: "Logout",
@@ -85,6 +71,8 @@ export default function AdminPage() {
             ),
             isLogout: true
         }
+
+        
     ];
 
     const isActive = (path) => location.pathname === path;
@@ -209,126 +197,9 @@ export default function AdminPage() {
                         <Route path="/welcome" element={<Welcome/>} />
                         <Route path="/cars" element={<ManageCars />} />
                         <Route path="/users" element=  {<UserManagment/>} />
-                        <Route path="/orders" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <div className="flex items-center space-x-3 mb-6">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h1 className="text-3xl font-bold text-slate-800">Order Management</h1>
-                                        <p className="text-slate-600">Track bookings, payments, and rental history</p>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-green-600 mb-1">156</div>
-                                        <p className="text-green-700 text-sm">Active Rentals</p>
-                                    </div>
-                                    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-yellow-600 mb-1">23</div>
-                                        <p className="text-yellow-700 text-sm">Pending</p>
-                                    </div>
-                                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-blue-600 mb-1">1,284</div>
-                                        <p className="text-blue-700 text-sm">Completed</p>
-                                    </div>
-                                    <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-purple-600 mb-1">LKR 2.4M</div>
-                                        <p className="text-purple-700 text-sm">Revenue</p>
-                                    </div>
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/reviews" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <div className="flex items-center space-x-3 mb-6">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h1 className="text-3xl font-bold text-slate-800">Reviews & Ratings</h1>
-                                        <p className="text-slate-600">Monitor customer feedback and service quality</p>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-yellow-600 mb-1">4.8</div>
-                                        <p className="text-yellow-700 text-sm">Average Rating</p>
-                                    </div>
-                                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-green-600 mb-1">1,847</div>
-                                        <p className="text-green-700 text-sm">Total Reviews</p>
-                                    </div>
-                                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
-                                        <div className="text-2xl font-bold text-blue-600 mb-1">97%</div>
-                                        <p className="text-blue-700 text-sm">Positive Feedback</p>
-                                    </div>
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/analytics" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <div className="flex items-center space-x-3 mb-6">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h1 className="text-3xl font-bold text-slate-800">Analytics Dashboard</h1>
-                                        <p className="text-slate-600">Business insights and performance metrics</p>
-                                    </div>
-                                </div>
-                                <div className="text-center py-12">
-                                    <div className="w-24 h-24 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-                                        <svg className="w-12 h-12 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-xl font-bold text-slate-800 mb-2">Analytics Coming Soon</h3>
-                                    <p className="text-slate-600">Advanced reporting and analytics features in development</p>
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/settings" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <div className="flex items-center space-x-3 mb-6">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-slate-500 to-slate-600 rounded-xl flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h1 className="text-3xl font-bold text-slate-800">System Settings</h1>
-                                        <p className="text-slate-600">Configure system parameters and preferences</p>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
-                                        <h3 className="font-bold text-slate-800 mb-2">Application Settings</h3>
-                                        <p className="text-slate-600 text-sm">Configure app behavior and features</p>
-                                    </div>
-                                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
-                                        <h3 className="font-bold text-slate-800 mb-2">Security Settings</h3>
-                                        <p className="text-slate-600 text-sm">Manage access controls and permissions</p>
-                                    </div>
-                                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
-                                        <h3 className="font-bold text-slate-800 mb-2">Payment Configuration</h3>
-                                        <p className="text-slate-600 text-sm">Setup payment gateways and methods</p>
-                                    </div>
-                                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
-                                        <h3 className="font-bold text-slate-800 mb-2">Notification Settings</h3>
-                                        <p className="text-slate-600 text-sm">Configure alerts and messaging</p>
-                                    </div>
-                                </div>
-                            </div>
-                        } />
+                        <Route path="/orders" element={<AdminOrder/>} />
+                         <Route path="/viewrentalcars" element={<ViewCars/>} />
+                        
                         <Route path="/logout" element={
                             <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100 text-center">
                                 <div className="w-16 h-16 mx-auto bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">

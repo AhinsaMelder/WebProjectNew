@@ -1,5 +1,7 @@
 import { model } from "mongoose";
 import Rental from "../models/rental.js";
+import Car from "../models/cars.js";
+import cron from "node-cron";
 
 export async function createrental(req,res){
 
@@ -33,6 +35,7 @@ const rental = new Rental({
     endDate: req.body.endDate,
     total : req.body.total,
     carId: req.body.carId,
+    carOwnerEmail: req.body.carOwnerEmail,
     model: req.body.model,
     brand: req.body.brand,
     image : req.body.image,
@@ -40,9 +43,86 @@ const rental = new Rental({
 });
 
 const craeterental = await rental.save();
+ await Car.updateOne({ carId: req.body.carId }, { $set: { isAvailable: false } });
+
 res.json({
     message: "Rental created successfully",
 });
 
-    
 }
+
+export async function getrental(req,res){
+
+    try{
+
+        const rental = await Rental.find({});
+        res.json(rental);
+
+    }catch(error){
+        res.json({
+            message:"Error getting rental",
+            error:error.message,
+        })
+    }
+
+}
+
+export async function getOrdersFromBuyers(req,res){
+
+    const email = req.params.email;
+
+    try{
+
+        const rental = await Rental.find({email:email}).sort({date:-1});
+        res.json(rental);
+
+    }catch(error){
+        res.json({
+            message:"Error getting rental",
+            error:error.message,
+        })
+    }
+
+
+}
+
+export async function getOrdersFromSellers(req,res){
+
+    const email = req.params.email;
+
+    try{
+
+        const rental = await Rental.find({carOwnerEmail:email}).sort({date:-1});
+        res.json(rental);
+
+    }catch(error){
+        res.json({
+            message:"Error getting rental",
+            error:error.message,
+        })
+    }
+}
+
+cron.schedule("0 0 * * *", async () => {
+    console.log("Checking for expired rentals...");
+
+    const now = new Date();
+
+    try {
+        // Find rentals where endDate has passed
+        const expiredRentals = await Rental.find({ endDate: { $lt: now } });
+
+        for (let rental of expiredRentals) {
+            await Car.updateOne(
+                { carId: rental.carId },
+                { $set: { IsActive: true } }
+            );
+        }
+
+        console.log("Expired rentals processed.");
+    } catch (error) {
+        console.error("Error updating cars:", error);
+    }
+});
+
+

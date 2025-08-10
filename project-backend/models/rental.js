@@ -52,6 +52,11 @@ const rentalSchema = mongoose.Schema({
         required:true,
      },
 
+     carOwnerEmail :{
+        type :String,
+        required:true,
+     },
+
      model :{
         type :String,
         required:true,

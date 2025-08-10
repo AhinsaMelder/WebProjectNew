@@ -4,6 +4,7 @@ import Profile from "./profile";
 import LeaserCar from "./leaserCar";
 import EditCars from "./editCar";
 import LeaserWelcome from "./welcome";
+import LeaserBooking from "./leaserBooking";
 
 
 export default function LeaserPage() {
@@ -176,12 +177,7 @@ export default function LeaserPage() {
                         <Route path="/welcome" element={<LeaserWelcome/>} />
                         <Route path="/cars" element={<LeaserCar/> } />
                         <Route path="/add-cars" element={<AddCar/>} />
-                        <Route path="/orders" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <h1 className="text-3xl font-bold text-slate-800">Orders Management</h1>
-                                <p className="text-slate-600 mt-2">Track and manage all booking requests</p>
-                            </div>
-                        } />
+                        <Route path="/orders" element={<LeaserBooking/>} />
                         <Route path="/profile" element={<Profile/>} />
                          <Route path="/edit-cars" element={<EditCars/>} />
                     </Routes>

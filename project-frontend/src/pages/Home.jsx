@@ -1,7 +1,26 @@
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  const handleBookNow = () => {
+    navigate('/signup');
+  };
+
+  const handleViewFleet = () => {
+    navigate('/deals');
+  };
+
+  const handleSearchCars = () => {
+    navigate('/signup');
+  };
+
+  const handleExploreFleet = () => {
+    navigate('/deals');
+  };
+
   return (
     <>
       <Header />
@@ -44,7 +63,10 @@ export default function Home() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button className="group bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold text-lg px-8 py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-300">
+              <button 
+                onClick={handleBookNow}
+                className="group bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold text-lg px-8 py-4 rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+              >
                 <span className="flex items-center space-x-2">
                   <span>Book Now</span>
                   <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +75,10 @@ export default function Home() {
                 </span>
               </button>
               
-              <button className="group bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold text-lg px-8 py-4 rounded-xl transition-all duration-300">
+              <button 
+                onClick={handleViewFleet}
+                className="group bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 text-white font-semibold text-lg px-8 py-4 rounded-xl transition-all duration-300"
+              >
                 <span className="flex items-center space-x-2">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -132,7 +157,10 @@ export default function Home() {
 
                 {/* Call to Action */}
                 <div className="pt-6">
-                  <button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold px-8 py-3 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg">
+                  <button 
+                    onClick={handleExploreFleet}
+                    className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold px-8 py-3 rounded-xl transform hover:scale-105 transition-all duration-300 shadow-lg"
+                  >
                     Explore Our Fleet
                   </button>
                 </div>
@@ -163,7 +191,7 @@ export default function Home() {
           {/* Booking Form */}
           <div className="max-w-6xl mx-auto">
             <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 p-8 lg:p-12">
-              <form className="space-y-8">
+              <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); handleSearchCars(); }}>
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                   {/* Pickup Location */}
                   <div className="space-y-3">

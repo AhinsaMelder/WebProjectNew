@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import cors from 'cors';
 import carRouter from './routes/carRouter.js';
 import rentalRouter from './routes/rentalRouter.js';
+import feedbackRouter from './routes/feedbackRouter.js';
 
 
 const app= express();
@@ -44,6 +45,7 @@ mongoose.connect("mongodb+srv://admin:12345@cluster0.ypz4pdp.mongodb.net/?retryW
 app.use("/api/user",userRouter);
 app.use("/api/cars",carRouter);
 app.use("/api/rental",rentalRouter);
+app.use("/api/feedback",feedbackRouter);
 
 app.listen(3000,()=>{
     console.log("server is running on port 3000");

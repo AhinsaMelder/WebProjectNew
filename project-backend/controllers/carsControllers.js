@@ -72,6 +72,22 @@ export async function getCars(req, res) {
     }
 }
 
+export async function getCarsAdmin(req, res) {
+    try {
+        const cars = await Car.find({ status: "approved" });
+
+        // ✅ Respond with array directly
+        res.json(cars);
+    } catch (error) {
+        // ✅ Use proper status code for errors
+        res.status(500).json({
+            message: "Error getting cars",
+            error: error.message,
+        });
+    }
+}
+
+
 export async function getCarByEmail(req,res){
 
     const email = req.params.email;
@@ -164,9 +180,10 @@ export async function getAprovedCars(req,res){
 
     try{
 
-        const cars = await Car.find({status : "approved"});
+        const cars = await Car.find({status : "approved", isAvailable : true});
 
         res.json(cars);
+        
 
     }catch(error){
         res.json({

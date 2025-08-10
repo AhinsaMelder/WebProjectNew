@@ -15,6 +15,9 @@ export default function Checkout() {
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
 
+    console.log(cart);
+    
+
     async function saveRental() {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -35,10 +38,12 @@ export default function Checkout() {
                     startDate: cart.startDate,
                     endDate: cart.endDate,
                     carId: cart.carId,
+                    carOwnerEmail: cart.caremail,
                     model: cart.model,
                     brand: cart.brand,
                     image: cart.image,
-                    total: cart.totalPrice
+                    total: cart.totalPrice,
+                  
                 },
                 {
                     headers: {
@@ -49,12 +54,18 @@ export default function Checkout() {
 
             toast.success('Rental saved successfully!');
             localStorage.removeItem('cart');
+            // Navigate to customer page after successful booking
+            navigate('/customerpage');
             
         } catch (error) {
             console.log(error);
             toast.error('Failed to save rental');
         }
     }
+
+    const handleBackToCustomerPage = () => {
+        navigate('/customerpage');
+    };
 
     return (
         <>
@@ -71,7 +82,10 @@ export default function Checkout() {
                     <div className="relative z-10 max-w-7xl mx-auto px-6 py-8">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-6">
-                                <button className="p-3 hover:bg-white/10 rounded-xl transition-all duration-300 text-white border border-white/20">
+                                <button 
+                                    onClick={handleBackToCustomerPage}
+                                    className="p-3 hover:bg-white/10 rounded-xl transition-all duration-300 text-white border border-white/20"
+                                >
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                     </svg>
@@ -113,6 +127,7 @@ export default function Checkout() {
                                     </h2>
                                 </div>
                                 
+                              
                                 {cart && (
                                     <div className="p-6 space-y-6">
                                         {/* Vehicle Display */}
@@ -324,12 +339,15 @@ export default function Checkout() {
                                             </span>
                                         </button>
 
-                                        <button className="w-full bg-white shadow-lg border-2 border-slate-200 hover:shadow-xl hover:border-slate-300 text-slate-700 font-semibold py-4 px-6 rounded-2xl transition-all duration-300">
+                                        <button 
+                                            onClick={handleBackToCustomerPage}
+                                            className="w-full bg-white shadow-lg border-2 border-slate-200 hover:shadow-xl hover:border-slate-300 text-slate-700 font-semibold py-4 px-6 rounded-2xl transition-all duration-300"
+                                        >
                                             <span className="flex items-center justify-center space-x-2">
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                                 </svg>
-                                                <span>Back to Vehicle Details</span>
+                                                <span>Back to Customer Page</span>
                                             </span>
                                         </button>
                                     </div>

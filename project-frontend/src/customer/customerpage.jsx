@@ -1,8 +1,10 @@
 import { Link, Route, Routes, useLocation, Navigate } from "react-router-dom";
 import Welcome from "./welcome";
-import { Bookings } from "./bookings";
-import { Profile } from "./profile";
+
+
 import { Logout } from "./logout";
+import CustomerBooking from "./customerBooking";
+import Profile from "./profile";
 
 export default function CustomerPage() {
     const location = useLocation();
@@ -18,15 +20,7 @@ export default function CustomerPage() {
                 </svg>
             )
         },
-        {
-            path: "/customerpage/browse",
-            label: "Browse Cars",
-            icon: (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-                </svg>
-            )
-        },
+        
         {
             path: "/customerpage/bookings",
             label: "My Bookings",
@@ -36,15 +30,7 @@ export default function CustomerPage() {
                 </svg>
             )
         },
-        {
-            path: "/customerpage/history",
-            label: "Rental History",
-            icon: (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                </svg>
-            )
-        },
+       
         {
             path: "/customerpage/profile",
             label: "Profile",
@@ -182,20 +168,10 @@ export default function CustomerPage() {
                         {/* Default route - automatically redirect to welcome */}
                         <Route path="/" element={<Navigate to="/customerpage/welcome" replace />} />
                         <Route path="/welcome" element={<Welcome />} />
-                        <Route path="/browse" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <h1 className="text-3xl font-bold text-slate-800">Available Cars</h1>
-                                <p className="text-slate-600 mt-2">Browse our premium vehicle collection</p>
-                            </div>
-                        } />
-                        <Route path="/bookings" element={<Bookings />} />
-                        <Route path="/history" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <h1 className="text-3xl font-bold text-slate-800">Rental History</h1>
-                                <p className="text-slate-600 mt-2">Your past rental experiences with Elite Drive</p>
-                            </div>
-                        } />
-                        <Route path="/profile" element={<Profile />} />
+                        
+                        <Route path="/bookings" element={<CustomerBooking/>} />
+                        
+                        <Route path="/profile" element={<Profile/>} />
                         <Route path="/payment" element={
                             <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
                                 <h1 className="text-3xl font-bold text-slate-800">Online Payment</h1>

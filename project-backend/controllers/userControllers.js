@@ -115,3 +115,32 @@ export async function viewdetails(req,res){
     }
 
 }
+
+export async function UpdateProfile(req, res) {
+  try {
+    const { email } = req.params;
+    const { firstName, lastName, password } = req.body;
+
+  
+    const updates = {
+      email,
+      firstName,
+      lastName,
+    };
+
+    if (password) {
+      updates.password = await bcrypt.hash(password, 10);
+    }
+
+    const result = await User.updateOne({ email }, { $set: updates });
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, message: "Profile updated successfully" });
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error updating profile", error: error.message });
+  }
+}
