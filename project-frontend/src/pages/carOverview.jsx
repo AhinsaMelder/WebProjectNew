@@ -7,7 +7,9 @@ import toast from "react-hot-toast";
 
 export default function CarOverview() {
     const [car, setCar] = useState(null);
+    const [feedbacks, setFeedbacks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [feedbackLoading, setFeedbackLoading] = useState(true);
     const [error, setError] = useState(null);
     const [rentalDays, setRentalDays] = useState(1);
     const [startDate, setStartDate] = useState('');
@@ -29,6 +31,23 @@ export default function CarOverview() {
             });
     }, [carId]);
 
+    // Fetch feedbacks for this car
+    useEffect(() => {
+        async function fetchFeedbacks() {
+            try {
+                setFeedbackLoading(true);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/feedback/getfeedbacks/${carId}`);
+                setFeedbacks(response.data || []);
+                setFeedbackLoading(false);
+            } catch (error) {
+                console.error("Error fetching feedbacks:", error);
+                setFeedbacks([]);
+                setFeedbackLoading(false);
+            }
+        }
+        fetchFeedbacks();
+    }, [carId]);
+
     // Calculate rental days when dates change
     useEffect(() => {
         if (startDate && endDate) {
@@ -43,11 +62,13 @@ export default function CarOverview() {
     // Set minimum date to today
     const today = new Date().toISOString().split('T')[0];
 
-    // Calculate total rental price
-    const totalPrice = car ? car.price * rentalDays : 0;
+    // Calculate pricing with discount
+    const subtotal = car ? car.price * rentalDays : 0;
+    const hasDiscount = rentalDays > 5;
+    const discountAmount = hasDiscount ? subtotal * 0.1 : 0;
+    const totalPrice = subtotal - discountAmount;
 
     function handleBooking(){
-
         const token = localStorage.getItem('token');
         if (!token) {
             toast.error('You are not logged in');
@@ -60,24 +81,52 @@ export default function CarOverview() {
             return;
         }
 
-          const cart = {
-              carId: carId,
-              model: car.model,
-              brand: car.brand,
-              image: car.images[0],
-              price: car.price,
-              startDate: startDate,
-              endDate: endDate,
-              rentalDays: rentalDays,
-              totalPrice: totalPrice ,   
-              caremail :car.email
-          }
+        const cart = {
+            carId: carId,
+            model: car.model,
+            brand: car.brand,
+            image: car.images[0],
+            price: car.price,
+            startDate: startDate,
+            endDate: endDate,
+            rentalDays: rentalDays,
+            subtotal: subtotal,
+            discountAmount: discountAmount,
+            hasDiscount: hasDiscount,
+            totalPrice: totalPrice,   
+            caremail: car.email
+        }
 
         localStorage.setItem('cart', JSON.stringify(cart));
-        navigate ("/checkout");
-   
-       
+        navigate("/checkout");
     }
+
+    // Format date for display
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    };
+
+    // Star rating component
+    const StarRating = ({ rating = 5 }) => {
+        return (
+            <div className="flex items-center space-x-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <svg
+                        key={star}
+                        className={`w-4 h-4 ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                ))}
+            </div>
+        );
+    };
 
     return (
         <>
@@ -160,6 +209,23 @@ export default function CarOverview() {
                                     </span>
                                     <span className="text-slate-500 text-lg">Per Day</span>
                                 </div>
+
+                                {/* Discount Banner */}
+                                <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-xl p-4">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-orange-800">Special Offer!</h4>
+                                            <p className="text-sm text-orange-700">
+                                                Get <span className="font-bold">10% discount</span> on rentals longer than 5 days
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             {/* Main Image */}
@@ -210,8 +276,61 @@ export default function CarOverview() {
                                 </div>
                             </div>
 
-                          
-                           
+                            {/* Customer Feedbacks Section */}
+                            <div className="bg-white shadow-lg border border-slate-100 rounded-2xl p-6">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="text-xl font-bold text-slate-900">Customer Reviews</h3>
+                                    <div className="flex items-center space-x-2">
+                                        <StarRating rating={5} />
+                                        <span className="text-sm text-slate-600">({feedbacks.length} reviews)</span>
+                                    </div>
+                                </div>
+
+                                {feedbackLoading ? (
+                                    <div className="flex items-center justify-center py-8">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-500/30 border-t-blue-500"></div>
+                                        <span className="ml-3 text-slate-600">Loading reviews...</span>
+                                    </div>
+                                ) : feedbacks.length === 0 ? (
+                                    <div className="text-center py-8">
+                                        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                            </svg>
+                                        </div>
+                                        <h4 className="text-lg font-semibold text-slate-700 mb-2">No Reviews Yet</h4>
+                                        <p className="text-slate-500">Be the first to share your experience with this vehicle!</p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4 max-h-96 overflow-y-auto">
+                                        {feedbacks.map((feedback, index) => (
+                                            <div key={index} className="border border-slate-200 rounded-xl p-4 hover:shadow-md transition-shadow duration-200">
+                                                <div className="flex items-start justify-between mb-3">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                                                            <span className="text-white font-semibold text-sm">
+                                                                {feedback.userEmail?.charAt(0).toUpperCase() || 'U'}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <h5 className="font-semibold text-slate-900">
+                                                                {feedback.userEmail || 'Anonymous User'}
+                                                            </h5>
+                                                            <div className="flex items-center space-x-2">
+                                                                <StarRating rating={5} />
+                                                                <span className="text-xs text-slate-500">
+                                                                    {feedback.createdAt ? formatDate(feedback.createdAt) : 'Recently'}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p className="text-slate-700 leading-relaxed">{feedback.feedback}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         {/* Right Side - Rental Calculator */}
@@ -256,6 +375,25 @@ export default function CarOverview() {
                                             className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         />
                                     </div>
+
+                                    {/* Discount Notice */}
+                                    {rentalDays > 5 && (
+                                        <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-green-800">🎉 Discount Applied!</h4>
+                                                    <p className="text-sm text-green-700">
+                                                        You're getting a 10% discount for renting more than 5 days!
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -271,26 +409,59 @@ export default function CarOverview() {
                                         <span className="text-slate-600">Rental Days:</span>
                                         <span className="font-semibold text-slate-800">{rentalDays} {rentalDays === 1 ? 'day' : 'days'}</span>
                                     </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-slate-600">Subtotal:</span>
+                                        <span className="font-semibold text-slate-800">Rs.{subtotal.toLocaleString()}</span>
+                                    </div>
+                                    
+                                    {hasDiscount && (
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-green-600 flex items-center">
+                                                <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                                                </svg>
+                                                10% Discount (5+ days):
+                                            </span>
+                                            <span className="font-semibold text-green-600">-Rs.{discountAmount.toLocaleString()}</span>
+                                        </div>
+                                    )}
+                                    
                                     <div className="border-t border-slate-200 pt-4">
                                         <div className="flex justify-between items-center">
                                             <span className="text-xl font-bold text-slate-900">Total Cost:</span>
-                                            <span className="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
-                                                Rs.{totalPrice.toLocaleString()}
-                                            </span>
+                                            <div className="text-right">
+                                                {hasDiscount && (
+                                                    <div className="text-sm text-slate-500 line-through">
+                                                        Rs.{subtotal.toLocaleString()}
+                                                    </div>
+                                                )}
+                                                <span className="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
+                                                    Rs.{totalPrice.toLocaleString()}
+                                                </span>
+                                                {hasDiscount && (
+                                                    <div className="text-sm text-green-600 font-semibold">
+                                                        You save Rs.{discountAmount.toLocaleString()}!
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                           
-                         
 
                             {/* Action Buttons */}
                             <div className="space-y-4">
                                 <button onClick={handleBooking}
                                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer">
                                     <span className="flex items-center justify-center space-x-3">
-                                        <span className="text-lg">Book for Rs.{totalPrice.toLocaleString()}</span>
+                                        <span className="text-lg">
+                                            Book for Rs.{totalPrice.toLocaleString()}
+                                            {hasDiscount && (
+                                                <span className="ml-2 bg-white/20 px-2 py-1 rounded-full text-sm">
+                                                    10% OFF
+                                                </span>
+                                            )}
+                                        </span>
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                         </svg>
@@ -339,6 +510,12 @@ export default function CarOverview() {
                                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                         </svg>
                                         No hidden charges
+                                    </div>
+                                    <div className="flex items-center text-orange-600">
+                                        <svg className="w-4 h-4 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                                        </svg>
+                                        10% discount for 5+ day rentals
                                     </div>
                                 </div>
                             </div>

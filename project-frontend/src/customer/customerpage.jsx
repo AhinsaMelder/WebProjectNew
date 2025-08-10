@@ -40,15 +40,7 @@ export default function CustomerPage() {
                 </svg>
             )
         },
-        {
-            path: "/customerpage/payment",
-            label: "Online Payment",
-            icon: (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-            )
-        },
+        
         {
             path: "/customerpage/logout",
             label: "Logout",
@@ -172,12 +164,7 @@ export default function CustomerPage() {
                         <Route path="/bookings" element={<CustomerBooking/>} />
                         
                         <Route path="/profile" element={<Profile/>} />
-                        <Route path="/payment" element={
-                            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                                <h1 className="text-3xl font-bold text-slate-800">Online Payment</h1>
-                                <p className="text-slate-600 mt-2">Make secure online payments for your bookings and rentals</p>
-                            </div>
-                        } />
+                       
                         <Route path="/logout" element={<Logout />} />
                         {/* Catch-all route for any unmatched paths */}
                         <Route path="*" element={<Navigate to="/customerpage/welcome" replace />} />

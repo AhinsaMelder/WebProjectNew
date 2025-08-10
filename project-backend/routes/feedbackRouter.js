@@ -1,8 +1,9 @@
 import express from 'express';
-import { savefeedback } from '../controllers/feedbackController.js';
+import { getfeedback, savefeedback } from '../controllers/feedbackController.js';
 
 const feedbackRouter = express.Router();
 
 feedbackRouter.post("/savefeedbacks/:carId",savefeedback);
+feedbackRouter.get("/getfeedback",getfeedback);
 
 export default feedbackRouter;

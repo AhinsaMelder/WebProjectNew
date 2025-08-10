@@ -36,4 +36,22 @@ export async function savefeedback(req,res){
         })
     }
 
+
+
+}
+
+
+export async function getfeedback(req,res){
+
+    try{
+
+        const feedback = await Feedback.find({}).sort({date:-1});
+        res.json(feedback);
+
+    }catch(error){
+        res.json({
+            message:"Error getting feedback",
+            error:error.message,
+        })
+    }
 }

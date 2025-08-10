@@ -1,43 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
-const testimonialsData = [
-  {
-    img: "/client-1.jpg",
-    name: "Sarah Johnson",
-    title: "Business Executive",
-    rating: 5,
-    text: "Elite Drive transformed my business trip into a luxury experience. The vehicle was immaculate and the service was impeccable. Their attention to detail is unmatched.",
-  },
-  {
-    img: "/client-2.jpg",
-    name: "Michael Adams",
-    title: "Travel Consultant",
-    rating: 5,
-    text: "Outstanding customer support! The concierge team anticipated my needs and provided seamless service from booking to return. Truly a premium experience.",
-  },
-  {
-    img: "/client-3.jpg",
-    name: "Emily Martinez",
-    title: "Event Planner",
-    rating: 5,
-    text: "The luxury fleet and professional service exceeded all expectations. Every client I've referred has been equally impressed. Elite Drive sets the standard.",
-  },
-  {
-    img: "/client-4.jpg",
-    name: "Jason Lee",
-    title: "Tech Entrepreneur",
-    rating: 5,
-    text: "Flexibility and reliability when it matters most. Their premium vehicles and white-glove service make every journey memorable. My go-to choice for luxury rentals.",
-  },
-  {
-    img: "/client-5.jpg",
-    name: "David Thompson",
-    title: "Investment Banker",
-    rating: 5,
-    text: "The epitome of luxury car rental service. From the pristine vehicles to the professional staff, every detail reflects their commitment to excellence.",
-  },
-];
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Stars = ({ rating }) => (
   <div className="flex text-yellow-400 mb-4">
@@ -57,6 +21,51 @@ const Stars = ({ rating }) => (
 );
 
 export default function Testimonials() {
+  const [feedback, setFeedback] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch feedback data from database
+  async function getFeedback() {
+    try {
+      setLoading(true);
+      const res = await axios.get(import.meta.env.VITE_BACKEND_URL + '/api/feedback/getfeedback');
+      setFeedback(res.data || []);
+      console.log('Feedback data:', res.data);
+      setLoading(false);
+    } catch (error) {
+      console.log('Error fetching feedback:', error);
+      setError('Failed to load testimonials');
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getFeedback();
+  }, []);
+
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Recently';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  // Get user initials for avatar
+  const getUserInitials = (email) => {
+    if (!email) return 'U';
+    return email.charAt(0).toUpperCase();
+  };
+
+  // Get user name from email (before @ symbol)
+  const getUserName = (email) => {
+    if (!email) return 'Anonymous User';
+    return email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+  };
+
   return (
     <>
       <Header />
@@ -102,30 +111,81 @@ export default function Testimonials() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {testimonialsData.map(({ img, name, title, rating, text }, idx) => (
-                <div
-                  key={idx}
-                  className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 group"
+            {/* Loading State */}
+            {loading && (
+              <div className="flex items-center justify-center py-16">
+                <div className="relative">
+                  <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-500/30 border-t-blue-500"></div>
+                  <div className="absolute inset-0 rounded-full bg-blue-500/20 animate-ping"></div>
+                </div>
+                <span className="ml-6 text-slate-700 text-lg">Loading testimonials...</span>
+              </div>
+            )}
+
+            {/* Error State */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <p className="text-red-600 text-lg">{error}</p>
+                <button 
+                  onClick={getFeedback}
+                  className="mt-4 bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
                 >
-                  <Stars rating={rating} />
-                  <blockquote className="text-slate-600 italic text-lg leading-relaxed mb-6">
-                    "{text}"
-                  </blockquote>
-                  <div className="flex items-center">
-                    <img
-                      src={img}
-                      alt={name}
-                      className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-blue-200 group-hover:border-blue-400 transition-colors duration-300"
-                    />
-                    <div>
-                      <h4 className="font-bold text-slate-800">{name}</h4>
-                      <p className="text-sm text-slate-500">{title}</p>
+                  Try Again
+                </button>
+              </div>
+            )}
+
+            {/* No Testimonials State */}
+            {!loading && !error && feedback.length === 0 && (
+              <div className="text-center py-16">
+                <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-slate-700 mb-4">No Testimonials Yet</h3>
+                <p className="text-slate-500 text-lg">
+                  Be the first to share your experience with Elite Drive!
+                </p>
+              </div>
+            )}
+
+            {/* Real Testimonials from Database */}
+            {!loading && !error && feedback.length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {feedback.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 group"
+                  >
+                    <Stars rating={5} />
+                    <blockquote className="text-slate-600 italic text-lg leading-relaxed mb-6">
+                      "{item.feedback || 'Great service and excellent experience!'}"
+                    </blockquote>
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center mr-4 border-2 border-blue-200 group-hover:border-blue-400 transition-colors duration-300">
+                        <span className="text-white font-semibold text-sm">
+                          {getUserInitials(item.email)}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-800">
+                          {getUserName(item.email)}
+                        </h4>
+                        <p className="text-sm text-slate-500">
+                          {formatDate(item.date)}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             {/* Stats Section */}
             <div className="mt-20 grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -140,7 +200,7 @@ export default function Testimonials() {
                 <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4">
                   <span className="text-2xl">👥</span>
                 </div>
-                <div className="text-3xl font-bold text-slate-800 mb-1">10K+</div>
+                <div className="text-3xl font-bold text-slate-800 mb-1">{feedback.length}+</div>
                 <div className="text-sm text-slate-600">Happy Customers</div>
               </div>
               <div className="text-center">
